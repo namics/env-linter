@@ -49,4 +49,9 @@ export interface IProject {
 	manifest: ProjectManifest;
 }
 
+export type MarkdownDocsNames = keyof Pick<
+	IOptions,
+	'dependenciesExactVersion' | 'hooksInstalled' | 'lts' | 'saveExact' | 'versions'
+>;
+
 export type PackageDependencyKeys = 'dependencies' | 'devDependencies';

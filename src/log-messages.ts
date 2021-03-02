@@ -1,6 +1,15 @@
 import chalk from 'chalk';
 import logSymbols from 'log-symbols';
-import { PackageDependencyKeys } from './const';
+import terminalLink from 'terminal-link';
+import { MarkdownDocsNames, PackageDependencyKeys } from './const';
+
+// eslint-disable-next-line
+const packageData = require('../package.json');
+const homepageURL = packageData.homepage;
+const pathToDocsFolder = '/tree/master/docs/';
+
+const createTerminalLink = (slug: MarkdownDocsNames) =>
+	terminalLink('Why is this?', `${homepageURL}${pathToDocsFolder}${slug}.md`);
 
 export const logMessages = {
 	success: {
@@ -24,34 +33,75 @@ export const logMessages = {
 	error: {
 		nodeVersionNotLTSError: (usedNodeVersion: string) =>
 			chalk.red(
-				`${logSymbols.error} Change node-version! You are using node ${usedNodeVersion} which is not a LTS (long term support) version.`
+				`${
+					logSymbols.error
+				} Change node-version! You are using node ${usedNodeVersion} which is not a LTS (long term support) version. ${createTerminalLink(
+					'lts'
+				)}`
 			),
 		wrongNPMVersionError: (usedNodeVersion: string, usedNPMVersion: string) =>
 			chalk.red(
-				`${logSymbols.error} Change npm version! You are using node ${usedNodeVersion} with npm ${usedNPMVersion}, keep node and npm in sync! https://nodejs.org/dist/index.json`
+				`${
+					logSymbols.error
+				} Change npm version! You are using node ${usedNodeVersion} with npm ${usedNPMVersion}, keep node and npm in sync! ${createTerminalLink(
+					'versions'
+				)}`
 			),
 		wrongProgramVersionError: (program: string, usedVersion: string, expectedVersion: string) =>
 			chalk.red(
-				`${logSymbols.error} Change ${program} version! You are using ${usedVersion} but your project requires ${expectedVersion}.`
+				`${
+					logSymbols.error
+				} Change ${program} version! You are using ${usedVersion} but your project requires ${expectedVersion}. ${createTerminalLink(
+					'versions'
+				)}`
 			),
 		readProgramVersionError: (program: string) =>
-			chalk.red(`${logSymbols.error} Error when executing '${program} --version'. Is ${program} installed?`),
+			chalk.red(
+				`${
+					logSymbols.error
+				} Error when executing '${program} --version'. Is ${program} installed? ${createTerminalLink(
+					'versions'
+				)}`
+			),
 		readGitRootError: () =>
 			chalk.red(
-				`${logSymbols.error} Error when executing 'git rev-parse --show-toplevel'. Are you in a git repository?`
+				`${
+					logSymbols.error
+				} Error when executing 'git rev-parse --show-toplevel'. Are you in a git repository? ${createTerminalLink(
+					'hooksInstalled'
+				)}`
 			),
 		readNodeVersionFileError: (file: string) =>
-			chalk.red(`${logSymbols.error} Couldn't find ${file} file in your project root directory.`),
+			chalk.red(
+				`${logSymbols.error} Couldn't find ${file} file in your project root directory. ${createTerminalLink(
+					'versions'
+				)}`
+			),
 		saveExactIsOffError: () =>
-			chalk.red(`${logSymbols.error} Set save-exact to true with "npm config set save-exact true".`),
+			chalk.red(
+				`${logSymbols.error} Set save-exact to true with "npm config set save-exact true". ${createTerminalLink(
+					'saveExact'
+				)}`
+			),
 		gitHooksNotInstalledError: () =>
-			chalk.red(`${logSymbols.error} Git hooks are not installed. Install with "npm i -D husky".`),
-		noPackagesFoundError: (cwd: string) => chalk.red(`${logSymbols.error} No packages in "${cwd}" found.`),
+			chalk.red(
+				`${logSymbols.error} Git hooks are not installed. Install with "npm i -D husky". ${createTerminalLink(
+					'hooksInstalled'
+				)}`
+			),
+		noPackagesFoundError: (cwd: string) =>
+			chalk.red(
+				`${logSymbols.error} No packages in "${cwd}" found. ${createTerminalLink('dependenciesExactVersion')}`
+			),
 		notAllDependenciesExactError: (type: PackageDependencyKeys, pkgName: string, errorStack: string) =>
 			chalk.red(
-				`${logSymbols.error} Not all ${type} in ${pkgName} have been declared by exact version(s).${errorStack}`
+				`${
+					logSymbols.error
+				} Not all ${type} in ${pkgName} have been declared by exact version(s). ${createTerminalLink(
+					'dependenciesExactVersion'
+				)} ${errorStack}.`
 			),
-		starWildcardVersionError: () => 'Wildcard "*" is not allowed as version declaration.',
+		starWildcardVersionError: () => `Wildcard "*" is not allowed as version declaration.`,
 		approximateVersionError: (declaration: string) =>
 			`Approximate version identifier "${declaration}" is not allowed.`,
 		tarballVersionError: (url: string) => `Tarball dependencies are not allowed (${url}).`,
