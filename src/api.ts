@@ -1,18 +1,20 @@
 import chalk from 'chalk';
 import { isCI } from 'ci-info';
 import { getCwd } from './get-cwd';
-import { getVersionCheckers } from './version-checker';
-import { getSaveExactChecker } from './save-exact';
-import { IOptions, ILogMessage } from './const';
-import { getHooksInstalledChecker } from './hooks-installed';
-import { splitVersions } from './fetch-options';
 import { getExactDependencyVersionsChecker } from './exact-dependency-versions';
+import { getHooksInstalledChecker } from './hooks-installed';
 import { getNodeLTSChecker } from './lts';
+import { getNodeSecurityChecker } from './security';
+import { getSaveExactChecker } from './save-exact';
+import { getVersionCheckers } from './version-checker';
+import { ILogMessage, IOptions } from './const';
+import { splitVersions } from './fetch-options';
 
 export interface IApiOptions {
 	cwd?: string;
 	versions?: string[];
 	lts?: boolean;
+	security?: boolean;
 	hooksInstalled?: boolean;
 	saveExact?: boolean;
 	dependenciesExactVersion?: boolean;
@@ -24,6 +26,7 @@ export async function api(apiOptions: IApiOptions) {
 		cwd,
 		versions: splitVersions(apiOptions.versions),
 		lts: apiOptions.lts,
+		security: apiOptions.security,
 		hooksInstalled: apiOptions.hooksInstalled,
 		saveExact: apiOptions.saveExact,
 		dependenciesExactVersion: apiOptions.dependenciesExactVersion,
@@ -43,6 +46,10 @@ export async function api(apiOptions: IApiOptions) {
 
 		if (options.lts) {
 			checkers.push(getNodeLTSChecker());
+		}
+
+		if (options.security) {
+			checkers.push(getNodeSecurityChecker());
 		}
 
 		if (options.hooksInstalled) {

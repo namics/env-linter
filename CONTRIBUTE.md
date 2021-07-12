@@ -29,7 +29,7 @@ We are using [commitlint](https://github.com/conventional-changelog/commitlint) 
 ## Smoke test 💨 with demo project
 
 It is a good practice to do a quick smoke test of the compiled env-linter before releasing.
-We have a very small [env-linter-demo](https://github.com/namics/env-linter-demo) project which uses the locally built env-linter.
+We have a very small [env-linter-demo](https://github.com/merkle-open/env-linter-demo) project which uses the locally built env-linter.
 A short smoke-test could look like this:
 
 1. Run `npm run build` in your env-linter project

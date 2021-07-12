@@ -10,6 +10,9 @@ export const getNodeList = async (purpose: string) => {
 		if (purpose === 'lts') {
 			return { error: true, text: logMessages.warning.fetchNodeListErrorNodeLTS(nodeVersionListURL) };
 		}
+		if (purpose === 'security') {
+			return { error: true, text: logMessages.warning.fetchNodeListErrorNodeSecurity(nodeVersionListURL) };
+		}
 		return { error: true, text: logMessages.warning.fetchNodeListErrorMatchingNPM(nodeVersionListURL) };
 	}
 };
